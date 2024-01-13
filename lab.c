@@ -13,6 +13,7 @@
 const int NUMBER_OF_WHEELS = 7;
 const int NUMBER_OF_FRONT_WHEELS = 3;
 const int FIGURES_IN_WING_ID = 9;
+const int NUMBER_OF_WINGS = 2;
 
 struct Wing{
     int* id; // un tableau d’entiers
@@ -33,15 +34,15 @@ struct Plane {
 
 // Creation de nos 7 rous pour l'avion
 struct Wheel* createWheels(int id){
-    struct Wheel* currentWheel= (struct Wheel *)malloc(sizeof(struct Wheel)* NUMBER_OF_WHEELS);
+    struct Wheel* wheels= (struct Wheel *)malloc(sizeof(struct Wheel)* NUMBER_OF_WHEELS);
 
     for(int iterPtr = 0; iterPtr < NUMBER_OF_WHEELS; iterPtr++){
-        currentWheel[iterPtr].id = id;
-        currentWheel[iterPtr].isRearWheel = (iterPtr < NUMBER_OF_FRONT_WHEELS) ? false:true ;
+        wheels[iterPtr].id = id;
+        wheels[iterPtr].isRearWheel = (iterPtr < NUMBER_OF_FRONT_WHEELS) ? false:true ;
         id++;
     };
 
-    return currentWheel;
+    return wheels;
 };
 
 void populateWingAttributes(struct Wing* wing, int id){
@@ -52,6 +53,17 @@ void populateWingAttributes(struct Wing* wing, int id){
         wing->id[iterPtr] = id%10;
         id  = id/10;
     };
+};
+
+struct Wing* createWings(long id){
+    struct Wing* wings= (struct Wing *)malloc(sizeof(struct Wing)* NUMBER_OF_WHEELS);
+
+    for(int iterPtr = 0; iterPtr < NUMBER_OF_WINGS; iterPtr++){
+        populateWingAttributes(&(wings[iterPtr]),id);
+        id++;
+    };
+
+    return wings;
 };
 
 /* TODO: 
@@ -80,7 +92,7 @@ int main(int argc, char** argv) {
         printf("%s\n",wheels[i].isRearWheel ? "true" : "false");
         i++;
     };
-
+    free(wheels);
    
     /* Create wing - [4 points] */
 
@@ -90,17 +102,24 @@ int main(int argc, char** argv) {
     populateWingAttributes(&wing, idWing);
     int i2 = 0;
     while(i2 < 9){
-        printf("%s %d\n","Position",9-i);
+        printf("%s %d\n","Position",9-i2);
         printf("%d\n",wing.id[i]);
         i2++;
     }
 
-    /*
-    long longId = 1;
-    Wing[] wings;
+    /*Test createWings*/
+    long longId = 165443;
+    struct Wing* wings;
     wings = createWings(longId);
-    */
-
+    
+    int i3 = 0;
+    while(i3 < 2){
+        printf("%s %d\n","Aile",i3+1);
+        for(int iterId = 0; iterId < 9; iterId++){
+            printf("%d\n",wings[i3].id[iterId]);
+        }
+        i3++;
+    }
     /* Create plane - [4 points] */
     /*
     int numberOfPlanes = 3;
