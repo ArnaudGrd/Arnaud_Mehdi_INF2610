@@ -11,14 +11,15 @@
 
 // Constantes des avions
 const int NUMBER_OF_WHEELS = 7;
+const int NUMBER_OF_WINGS = 2;
 const int NUMBER_OF_FRONT_WHEELS = 3;
 const int FIGURES_IN_WING_ID = 9;
 
-struct Wing{
+struct Wing {
     int* id; // un tableau d’entiers
 };
 
-struct Wheel{
+struct Wheel {
     int id; // un entier
     bool isRearWheel; // un booléen
 };
@@ -31,7 +32,7 @@ struct Plane {
     struct Wing* wings; // un tableau de type struct Wing
 };
 
-// Creation de nos 7 rous pour l'avion
+// Creation de nos 7 roues pour l'avion
 struct Wheel* createWheels(int id){
     struct Wheel* currentWheel= (struct Wheel *)malloc(sizeof(struct Wheel)* NUMBER_OF_WHEELS);
 
@@ -54,11 +55,28 @@ void populateWingAttributes(struct Wing* wing, int id){
     };
 };
 
+struct Wing* createWings(struct Wing* wing, long longId){
+    struct Wing* currentWing = (struct Wing *)malloc(sizeof(struct Wing)* NUMBER_OF_WINGS);
+
+    for(int iterPtr = 0; iterPtr < NUMBER_OF_WINGS; iterPtr++){
+        populateWingAttributes(&currentWing[iterPtr], longId);
+        longId++;
+    };
+
+    return currentWing;
+};
+
+void createPlanes(struct Plane* plane, char* id, int numberOfPlanes){
+    for(int iterPtr = 0; iterPtr < numberOfPlanes; iterPtr++){
+        plane[iterPtr].id = id;
+        plane[iterPtr].isAvailable = true;
+        plane[iterPtr].wheels = createWheels(atoi(id));
+        plane[iterPtr].wings = createWings(plane[iterPtr].wings, atoll(id));
+        id++;
+    };
+};
+
 /* TODO: 
-        -createWing : Similaire à createWheels
-        -createPlane : j'ai pas encore lu dessus
-            mais ça m'a l'aire faisable rapidement aussi
-    Ça va concule la partie 2 on pourra ensuite se concentrer sur
     La Partie 3*/
 
 int main(int argc, char** argv) {
